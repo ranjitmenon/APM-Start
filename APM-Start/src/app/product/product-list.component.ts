@@ -17,15 +17,15 @@ export class ProductListComponent implements OnInit {
   errorMessage: string = '';
   private _listFiter: string = '';
   sub!: Subscription;
+  listFilter: string | undefined;
+  // get listFilter(): string {
+  //   return this._listFiter;
+  // }
 
-  get listFilter(): string {
-    return this._listFiter;
-  }
-
-  set listFilter(value: string) {
-    this.filteredProducts$ = this.performFilter(value);
-    console.log('In setter:', value);
-  }
+  // set listFilter(value: string) {
+  //   this.filteredProducts$ = this.performFilter(value);
+  //   console.log('In setter:', value);
+  // }
 
   constructor(private productService: ProductService) {
 

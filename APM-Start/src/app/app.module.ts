@@ -9,6 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ProductDetailComponent } from './product/product-detail.component';
 import { WelcomeComponent } from './home/welcome.component';
 import { RouterModule } from '@angular/router';
+import { SearchTextPipe } from './shared/search-text.pipe';
 
 @NgModule({
   declarations: [
@@ -17,11 +18,12 @@ import { RouterModule } from '@angular/router';
     ConvertToSpacesPipe,
     StarComponent,
     ProductDetailComponent,
-    WelcomeComponent
+    WelcomeComponent    
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    SearchTextPipe,
     HttpClientModule,
     RouterModule.forRoot([
       { path: 'product', component: ProductListComponent},

@@ -62,6 +62,7 @@ export class ProductListComponent {
   }
 
   onItemSelected(mesage:  BehaviorSubject<string>): void {
+    if(mesage) {
     const productNameSelected$ = mesage.asObservable();
     this.products$ = combineLatest([
       this.productService.products$,
@@ -71,6 +72,7 @@ export class ProductListComponent {
         products.filter((product: IProduct) =>
           product.productName.toLocaleLowerCase().includes(selectedProduct))
       ))
+    }
   }
 
   onRatingClicked(mesage: string): void {

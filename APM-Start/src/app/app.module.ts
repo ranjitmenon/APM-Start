@@ -4,27 +4,25 @@ import { ProductListComponent } from './product/product-list.component';
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 import { ConvertToSpacesPipe } from './shared/convert-to-spaces.pipe';
-import { StarComponent } from './shared/star.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ProductDetailComponent } from './product/product-detail.component';
 import { WelcomeComponent } from './home/welcome.component';
 import { RouterModule } from '@angular/router';
-import { SearchTextPipe } from './shared/search-text.pipe';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     ProductListComponent,
     ConvertToSpacesPipe,
-    StarComponent,
     ProductDetailComponent,
-    WelcomeComponent    
+    WelcomeComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    SearchTextPipe,
     HttpClientModule,
+    SharedModule,
     RouterModule.forRoot([
       { path: 'product', component: ProductListComponent},
       { path: 'product/:id', component: ProductDetailComponent},

@@ -1,10 +1,11 @@
-import { Component,EventEmitter,Input,OnChanges, Output } from "@angular/core";
-
+import { Component,EventEmitter,Input,OnChanges, Output} from "@angular/core";
+import { FormsModule } from '@angular/forms';
 
 @Component({
 selector: 'pm-star',
 templateUrl: './star.component.html',
-styleUrls: ['./star.component.css']
+styleUrls: ['./star.component.css'],
+
 })
 
 export class StarComponent implements OnChanges {

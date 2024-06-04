@@ -1,76 +1,79 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { IProduct } from './product';
 import { ProductService } from './product.service';
-import { Observable, Subscription, map, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, catchError, combineLatest, map, of } from 'rxjs';
+
 
 @Component({
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.css',
-  providers: [ProductService]
+  providers: [ProductService],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProductListComponent implements OnInit {
+export class ProductListComponent {
   pageTitle: string = 'Product List';
   imageWidth: number = 50;
   imageMargin: number = 2;
   showImage: boolean = false;
-  //filteredProducts: IProduct[] = [];
   errorMessage: string = '';
-  private _listFiter: string = '';
+  listFilter: string = '';
   sub!: Subscription;
-  listFilter: string | undefined;
+
+
+  //private productNameSelectedSubject = new BehaviorSubject<string>('');
+
+ // productNameSelected$ = this.productNameSelectedSubject.asObservable();
+
   // get listFilter(): string {
   //   return this._listFiter;
   // }
 
   // set listFilter(value: string) {
-  //   this.filteredProducts$ = this.performFilter(value);
+  //   this.productNameSelectedSubject.next(value);
   //   console.log('In setter:', value);
   // }
 
   constructor(private productService: ProductService) {
-
+   
   }
 
-  //products: IProduct[] = [];
- products$!: Observable<IProduct[]>
- filteredProducts$!: Observable<IProduct[]> ;
+
+  products$: Observable<IProduct[]> = this.productService.products$
+    .pipe(
+
+      catchError(err => {
+        this.errorMessage = err;
+        return of([])
+      }));
+
+
+  // products$ = combineLatest([
+  //   this.productService.products$,
+  //   this.productNameSelected$
+  // ]).pipe(
+  //   map(([products, selectedProduct]) =>
+  //     products.filter((product: IProduct) =>
+  //       product.productName.toLocaleLowerCase().includes(selectedProduct))
+  //   ))
+
 
   toggleImage(): void {
     this.showImage = !this.showImage;
   }
 
-  ngOnInit(): void {
-  //  this.sub =  this.productService.getProducts().subscribe({
-  //     next: products=> {
-  //       this.products = products;
-  //       this.filteredProducts = this.products;
-  //     },
-  //     error: err => this.errorMessage = err
-  //   });
-
-  this.products$ = this.productService.getProducts();
-  this.products$ .pipe(
-    map(x=> x),
-    tap(x=> console.log(`The value of product$ is ${x}`))
-  )
-  this.filteredProducts$ = this.products$;
-
-  // this.filteredProducts$ .pipe(
-  //   map(x=> x),
-  //   tap(x=> console.log(`The value of filteredProducts$ is ${x}`)))
+  onItemSelected(mesage:  BehaviorSubject<string>): void {
+    const productNameSelected$ = mesage.asObservable();
+    this.products$ = combineLatest([
+      this.productService.products$,
+      productNameSelected$
+    ]).pipe(
+      map(([products, selectedProduct]) =>
+        products.filter((product: IProduct) =>
+          product.productName.toLocaleLowerCase().includes(selectedProduct))
+      ))
   }
 
   onRatingClicked(mesage: string): void {
     this.pageTitle = 'Product List: ' + mesage;
   }
-
-  performFilter(filterBy: string): Observable<IProduct[]>   {
-    filterBy = filterBy.toLocaleLowerCase();
-    return this.products$?.pipe(map(products => products.filter((product: IProduct) =>
-      product.productName.toLocaleLowerCase().includes(filterBy))));
-  }
-
-  // ngOnDestroy() {
-  //   this.sub.unsubscribe();
-  // }
 }

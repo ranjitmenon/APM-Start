@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -11,9 +11,11 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class CriteriaComponent implements AfterViewInit ,OnChanges {
 
-  @Input() listFilter: string | undefined;
+  @Input() listFilter: string | undefined ;
+  @Input() hitCount: number | undefined;
   @Output() productNameSelectedSubject:  BehaviorSubject<string> = new BehaviorSubject<string>('');
-  @ViewChild('filterElement') filterElementRef: ElementRef | undefined;
+  @ViewChild('filterElement')
+  filterElementRef!: ElementRef;
 
   //productNameSelected$ = this.productNameSelectedSubject.asObservable();
 
@@ -30,12 +32,16 @@ export class CriteriaComponent implements AfterViewInit ,OnChanges {
   //   console.log('In setter:', value);
   // }
 
-  ngOnChanges(): void {
+  ngOnChanges(changes: SimpleChanges): void {
+
+    if(changes['listFilter'] && changes['listFilter'].currentValue) {
+      this.productNameSelectedSubject.next(changes['listFilter'].currentValue);
+    }
    //this.productNameSelectedSubject.next(this.listFilter);
    //this.itemSelected.emit(this.listFilter);
   }
   ngAfterViewInit(): void {
-  //  this.filterElementRef.nativeElement.focus();
+    this.filterElementRef.nativeElement.focus();
   }
 }
 

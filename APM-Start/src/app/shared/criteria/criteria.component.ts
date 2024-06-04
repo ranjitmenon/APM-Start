@@ -11,9 +11,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class CriteriaComponent implements AfterViewInit ,OnChanges {
 
-  @Input() listFilter: string;
+  @Input() listFilter: string | undefined;
   @Output() productNameSelectedSubject:  BehaviorSubject<string> = new BehaviorSubject<string>('');
-  @ViewChild('filterElement') filterElementRef: ElementRef;
+  @ViewChild('filterElement') filterElementRef: ElementRef | undefined;
 
   //productNameSelected$ = this.productNameSelectedSubject.asObservable();
 
@@ -31,11 +31,11 @@ export class CriteriaComponent implements AfterViewInit ,OnChanges {
   // }
 
   ngOnChanges(): void {
-    this.productNameSelectedSubject.next(this.listFilter);
+   //this.productNameSelectedSubject.next(this.listFilter);
    //this.itemSelected.emit(this.listFilter);
   }
   ngAfterViewInit(): void {
-    this.filterElementRef.nativeElement.focus();
+  //  this.filterElementRef.nativeElement.focus();
   }
 }
 
